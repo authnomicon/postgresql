@@ -32,13 +32,17 @@
   "assembly": {
     "namespace": "org.authnomicon/postgresql",
     "components": [
-      "directory"
+      "directory",
+      "credentials/passwordstore"
     ]
   },
   "directories": {
     "com": "com"
   },
   "dependencies": {
+    "@phc/pbkdf2": "^1.1.14",
+    "pg": "^8.11.5",
+    "uuidv7": "^0.6.3"
   },
   "devDependencies": {
     "chai": "^4.3.4",
