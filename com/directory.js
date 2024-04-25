@@ -1,6 +1,4 @@
-var Directory = require('../lib/userdirectory');
-
-// TODO: rename file to just "directory"
+var Directory = require('../lib/directory');
 
 exports = module.exports = function(db) {
   return new Directory(db);
@@ -9,5 +7,5 @@ exports = module.exports = function(db) {
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/core.Directory';
 exports['@require'] = [
-  //'./database'
+  './database'
 ];
