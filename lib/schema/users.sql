@@ -1,3 +1,10 @@
+CREATE TYPE email AS (
+  address TEXT,
+  type TEXT,
+  is_primary BOOLEAN,
+  is_verified BOOLEAN
+);
+
 -- postgres won't allow a singulear "user" table, so violating that convention here
 CREATE TABLE users (
   user_id TEXT PRIMARY KEY,
@@ -7,5 +14,6 @@ CREATE TABLE users (
   given_name TEXT,
   middle_name TEXT,
   honorific_prefix TEXT,
-  honorific_suffix TEXT
+  honorific_suffix TEXT,
+  emails email[]
 );

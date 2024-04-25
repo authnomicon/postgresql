@@ -33,7 +33,7 @@ exports = module.exports = function($location) {
           //console.log(res);
           
           if (res && res.rows && res.rows[0] && res.rows[0]['to_regclass'] === null) {
-            //console.log('NEED TO CREATE USERS TABLE');
+            console.log('NEED TO CREATE USERS TABLE');
             
             var sql = fs.readFileSync(path.join(__dirname, '../lib/schema/users.sql'), 'utf8');
             return self.query(sql);
@@ -43,6 +43,7 @@ exports = module.exports = function($location) {
           
         })
         .then(function(res) {
+          console.log(res)
           //console.log('create next table...');
           
           if (res) {
@@ -53,7 +54,7 @@ exports = module.exports = function($location) {
           
         })
         .catch(function(error) {
-          console.log('Failed to initialize pg schema');
+          console.log('$$$ Failed to initialize pg schema');
           console.log(err);
         });
     })
