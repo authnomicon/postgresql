@@ -10,38 +10,6 @@ var composite = require('postgres-composite');
 // https://github.com/brianc/node-pg-types
 // TODO: look these up dynamically
 var types = require('pg').types
-types.setTypeParser(16434, function(val) {
-  console.log('!!! PARSE COMPOSITE TYPE !!!');
-  console.log(val);
-  
-  
-  var parsed =  array.parse(val, function(v) {
-    console.log(v);
-    
-    var x = Array.from(composite.parse(v));
-    console.log(x);
-    
-    
-    
-    // TODO: look these property names up in the db schema
-    return {
-      address: x[0],
-      type: x[1],
-      is_primary: x[2],
-      is_verified: x[3]
-    };
-    
-    //return v;
-  });
-  console.log(parsed);
-  
-  
-  return parsed;
-  
-  //return val;
-  
-  //return parseInt(val, 10)
-})
 
 
 
@@ -91,6 +59,68 @@ exports = module.exports = function($location) {
           
           if (res) {
             //console.log(res);
+          }
+          
+          // https://www.postgresql.org/docs/current/catalog-pg-type.html
+          
+          //return self.query('select typname, oid, typarray from pg_type order by oid');
+          return self.query('select * from pg_type order by oid');
+          
+        })
+        .then(function(res) {
+          console.log('QUERYIED TYPES');
+          //console.log(res)
+          
+          //var util = require('util');
+          //console.log(util.inspect(res.rows,{ depth: null }));
+          //16385
+          
+          //console.log(JSON.stringify(res.rows, null, 2))
+          
+          var row, i, len;
+          for (i = 0, len = res.rows.length; i < len; ++i) {
+            row = res.rows[i];
+            //console.log('check row: ');
+            //console.log(row)
+            
+            if (row.typname == '_email') {
+              console.log('REGISTER EMAIL TYPE!!!!');
+              
+              //types.setTypeParser(16434, function(val) {
+              types.setTypeParser(row.oid, function(val) {
+                console.log('!!! PARSE COMPOSITE TYPE !!!');
+                console.log(val);
+  
+  
+                var parsed =  array.parse(val, function(v) {
+                  console.log(v);
+    
+                  var x = Array.from(composite.parse(v));
+                  console.log(x);
+    
+    
+    
+                  // TODO: look these property names up in the db schema
+                  return {
+                    address: x[0],
+                    type: x[1],
+                    is_primary: x[2],
+                    is_verified: x[3]
+                  };
+    
+                  //return v;
+                });
+                console.log(parsed);
+  
+  
+                return parsed;
+  
+                //return val;
+  
+                //return parseInt(val, 10)
+              })
+            }
+            
           }
           
           
