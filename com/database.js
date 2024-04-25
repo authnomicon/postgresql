@@ -1,6 +1,41 @@
 var pg = require('pg');
 var fs = require('fs');
 var path = require('path');
+var array = require('postgres-array');
+var composite = require('postgres-composite');
+
+// https://www.npmjs.com/package/pg-array
+// https://www.npmjs.com/package/postgres-array
+
+// https://github.com/brianc/node-pg-types
+// TODO: look these up dynamically
+var types = require('pg').types
+types.setTypeParser(16434, function(val) {
+  console.log('!!! PARSE COMPOSITE TYPE !!!');
+  console.log(val);
+  
+  
+  var parsed =  array.parse(val, function(v) {
+    console.log(v);
+    
+    var x = Array.from(composite.parse(v));
+    console.log(x);
+    
+    return x;
+    
+    //return v;
+  });
+  console.log(parsed);
+  
+  
+  return parsed;
+  
+  //return val;
+  
+  //return parseInt(val, 10)
+})
+
+
 
 // https://www.postgresql.org/docs/current/protocol.html
 // https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=5432
