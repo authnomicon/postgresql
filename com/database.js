@@ -8,7 +8,7 @@ var path = require('path');
 exports = module.exports = function($location) {
   // TODO: get this from a connection pool of some sort
   
-  console.log('CONNECT TO POSTGRES!');
+  //console.log('CONNECT TO POSTGRES!');
   //console.log($location);
   
   return new Promise(function(resolve, reject) {
@@ -21,7 +21,7 @@ exports = module.exports = function($location) {
         return;
       }
       
-      console.log('connected to postgres');
+      //console.log('connected to postgres');
       
       // Inspired by connect-pg-simple to create db
       
@@ -30,10 +30,10 @@ exports = module.exports = function($location) {
       
       this.query('SELECT to_regclass($1::text)', [ 'users' ])
         .then(function(res) {
-          console.log(res);
+          //console.log(res);
           
           if (res && res.rows && res.rows[0] && res.rows[0]['to_regclass'] === null) {
-            console.log('NEED TO CREATE USERS TABLE');
+            //console.log('NEED TO CREATE USERS TABLE');
             
             var sql = fs.readFileSync(path.join(__dirname, '../lib/schema/users.sql'), 'utf8');
             return self.query(sql);
@@ -43,10 +43,10 @@ exports = module.exports = function($location) {
           
         })
         .then(function(res) {
-          console.log('create next table...');
+          //console.log('create next table...');
           
           if (res) {
-            console.log(res);
+            //console.log(res);
           }
           
           

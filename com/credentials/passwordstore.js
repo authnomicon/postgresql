@@ -1,7 +1,7 @@
 var PasswordStore = require('../../lib/credentials/passwordstore');
 
 exports = module.exports = function(db) {
-  console.log('CONNECT TO POSTGRES!');
+  //console.log('CONNECT TO POSTGRES!');
   
   return new PasswordStore(db);
 };
