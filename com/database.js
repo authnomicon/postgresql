@@ -21,7 +21,15 @@ types.setTypeParser(16434, function(val) {
     var x = Array.from(composite.parse(v));
     console.log(x);
     
-    return x;
+    
+    
+    // TODO: look these property names up in the db schema
+    return {
+      address: x[0],
+      type: x[1],
+      is_primary: x[2],
+      is_verified: x[3]
+    };
     
     //return v;
   });
