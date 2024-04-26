@@ -35,7 +35,8 @@
       "directory",
       "credentials/federatedidstore",
       "credentials/passwordstore",
-      "oauth/clientdirectory"
+      "oauth/clientdirectory",
+      "oauth/credentials/clientsecretstore"
     ]
   },
   "directories": {
