@@ -54,6 +54,9 @@ exports = module.exports = function($location) {
           
         })
         .then(function(res) {
+          return self.query('select * from pg_namespace order by oid');
+        })
+        .then(function(res) {
           console.log(res)
           //console.log('create next table...');
           
@@ -83,8 +86,30 @@ exports = module.exports = function($location) {
             //console.log('check row: ');
             //console.log(row)
             
-            if (row.typname == '_email') {
-              console.log('REGISTER EMAIL TYPE!!!!');
+            if (row.typcategory == 'A') {
+              //console.log('ARRAY TYPE: ' + row.oid);
+              //console.log(row);
+            }
+            
+            
+            if (row.typname == 'email') {
+              console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
+              
+              types.setTypeParser(row.oid, require('../lib/types/email')());
+              
+              
+              if (row.typarray) {
+                console.log('PARSE THE ARRAY OF EMAILS!: ' + row.typarray);
+                types.setTypeParser(row.typarray, require('../lib/types/array')(types, row.oid));
+              }
+              
+            }
+            
+            
+            // https://www.postgresql.org/docs/current/datatype-oid.html
+            
+            if (row.typname == 'x_email') {
+              console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
               
               //types.setTypeParser(16434, function(val) {
               types.setTypeParser(row.oid, function(val) {
