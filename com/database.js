@@ -26,6 +26,7 @@ exports = module.exports = function($location) {
     
     
     function createCompositeType(client, relid, oid, aoid) {
+      // TODO: can slim down the columns selected here
       return client.query('SELECT * from pg_attribute WHERE attrelid = $1', [ relid ])
         .then(function(res) {
           console.log(res);
@@ -54,8 +55,19 @@ exports = module.exports = function($location) {
         return;
       }
       
-      //console.log('connected to postgres');
+      // pg-types stuff and metadata queries
+      // select * from pg_namespace order by oid
+      // select * from pg_class order by oid
+      // https://www.postgresql.org/docs/current/catalog-pg-type.html
+      // select * from pg_type order by oid
+            // TODO: look at typrelid for attributes?
+            //. yes: it has a "reltype" for TYPEs, which point to the composite type
+            //.  reltype.   normal tables are 0
+            //.  better: relkind is 'c' for composite types
+            // TODO: look at pg_attribute for attributes
+      // https://www.postgresql.org/docs/current/datatype-oid.html
       
+      //console.log('connected to postgres');
       // Inspired by connect-pg-simple to create db
       
       
@@ -71,162 +83,16 @@ exports = module.exports = function($location) {
             var sql = fs.readFileSync(path.join(__dirname, '../lib/schema/users.sql'), 'utf8');
             return self.query(sql);
           }
-          
-          
-          
         })
         .then(function(res) {
-          return self.query('select * from pg_namespace order by oid');
-        })
-        .then(function(res) {
-          //console.log(res)
-          return self.query('select * from pg_class order by oid');
-        })
-        .then(function(res) {
-          //console.log(res)
-          //return self.query('select * from pg_attribute order by oid');
-        })
-        .then(function(res) {
-          //console.log(res)
-          
-          console.log('!!!! SELECTING ALL COMPOSITE TYPES');
-          
           // select all composite types
-          return self.query('select pg_class.oid AS relid, pg_type.oid, pg_type.typname, pg_type.typarray from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where pg_class.relkind = $1 order by pg_type.oid', ['c']);
-          //return self.query('select * from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
+          return self.query('SELECT pg_class.oid AS relid, pg_type.oid, pg_type.typname, pg_type.typarray FROM pg_class JOIN pg_type ON pg_class.reltype = pg_type.oid WHERE pg_class.relkind = $1 ORDER BY pg_type.oid', [ 'c' ]);
         })
         .then(function(res) {
-          console.log(res);
-          
           // Fetch the attribute tables for all these rows, and insert composite types.
-          
-          // rows: [ { relid: 16384, oid: 16386, typname: 'email', typarray: 16385 } ]
-          
-          console.log('!!!! CREATING COMPOSITE TYPES');
-          
           return Promise.all(res.rows.map(function(row) {
             return createCompositeType(self, row.relid, row.oid, row.typarray);
           }));
-        })
-        .then(function(res) {
-          //console.log(res)
-          
-          console.log('COMPOSITE TYPES CREATED!!!');
-          
-          //console.log('!!!! SELECTING ATTRIBUTES OF COMPOSITE TYPE');
-          
-          // select all composite types
-          //return self.query('select pg_type.oid, pg_type.typname, pg_type.typarray from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
-          return self.query('select * from pg_attribute where attrelid = $1', [ 16384 ]);
-        })
-        .then(function(res) {
-          //console.log(res)
-          //console.log(JSON.stringify(res.rows, null, 2))
-          //console.log('create next table...');
-          
-          if (res) {
-            //console.log(res);
-          }
-          
-          // https://www.postgresql.org/docs/current/catalog-pg-type.html
-          
-          //return self.query('select typname, oid, typarray from pg_type order by oid');
-          return self.query('select * from pg_type order by oid');
-          
-        })
-        .then(function(res) {
-          console.log('QUERYIED TYPES');
-          //console.log(res)
-          
-          //var util = require('util');
-          //console.log(util.inspect(res.rows,{ depth: null }));
-          //16385
-          
-          //console.log(JSON.stringify(res.rows, null, 2))
-          
-          var row, i, len;
-          for (i = 0, len = res.rows.length; i < len; ++i) {
-            row = res.rows[i];
-            //console.log('check row: ');
-            //console.log(row)
-            
-            if (row.typcategory == 'A') {
-              //console.log('ARRAY TYPE: ' + row.oid);
-              //console.log(row);
-            }
-
-            if (row.typcategory == 'C') {
-              //console.log('COMPOSITE TYPE: ' + row.oid);
-              //console.log(row);
-            }
-            
-            
-            
-            // TODO: look at typrelid for attributes?
-            //. yes: it has a "reltype" for TYPEs, which point to the composite type
-            //.  reltype.   normal tables are 0
-            //.  better: relkind is 'c' for composite types
-            // TODO: look at pg_attribute for attributes
-            
-            //if (row.typname == 'email') {
-            if (0) {
-              console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
-              
-              types.setTypeParser(row.oid, require('../lib/types/email')());
-              
-              
-              if (row.typarray) {
-                console.log('PARSE THE ARRAY OF EMAILS!: ' + row.typarray);
-                types.setTypeParser(row.typarray, require('../lib/types/array')(types, row.oid));
-              }
-              
-            }
-            
-            
-            // https://www.postgresql.org/docs/current/datatype-oid.html
-            
-            if (row.typname == 'x_email') {
-              console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
-              
-              //types.setTypeParser(16434, function(val) {
-              types.setTypeParser(row.oid, function(val) {
-                console.log('!!! PARSE COMPOSITE TYPE !!!');
-                console.log(val);
-  
-  
-                var parsed =  array.parse(val, function(v) {
-                  console.log(v);
-    
-                  var x = Array.from(composite.parse(v));
-                  console.log(x);
-    
-    
-    
-                  // TODO: look these property names up in the db schema
-                  return {
-                    address: x[0],
-                    type: x[1],
-                    is_primary: x[2],
-                    is_verified: x[3]
-                  };
-    
-                  //return v;
-                });
-                console.log(parsed);
-  
-  
-                return parsed;
-  
-                //return val;
-  
-                //return parseInt(val, 10)
-              })
-            }
-            
-          }
-          
-          
-          
         })
         .catch(function(error) {
           console.log('$$$ Failed to initialize pg schema');
