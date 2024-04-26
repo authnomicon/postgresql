@@ -24,6 +24,19 @@ exports = module.exports = function($location) {
   
   return new Promise(function(resolve, reject) {
     
+    
+    function createCompositeType(client, relid) {
+      
+      
+      return function() {
+        return client.query('SELECT * from pg_attribute WHERE attrelid = $1', [ relid ]);
+      };
+    }
+    
+    
+    
+    
+    
     var client = new pg.Client({ connectionString: process.env.DATABASE_URL });
     client.connect(function(err) {
       if (err) {
@@ -78,11 +91,16 @@ exports = module.exports = function($location) {
           
           // Fetch the attribute tables for all these rows, and insert composite types.
           
+          // rows: [ { relid: 16384, oid: 16386, typname: 'email', typarray: 16385 } ]
           
-          return;
+          return Promise.all(res.rows.map(function(row) {
+            return createCompositeType(self, row.relid);
+          }));
         })
         .then(function(res) {
           //console.log(res)
+          
+          console.log('COMPOSITE TYPES CREATED!!!');
           
           //console.log('!!!! SELECTING ATTRIBUTES OF COMPOSITE TYPE');
           
