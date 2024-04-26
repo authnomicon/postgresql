@@ -70,20 +70,28 @@ exports = module.exports = function($location) {
           console.log('!!!! SELECTING ALL COMPOSITE TYPES');
           
           // select all composite types
-          //return self.query('select pg_type.oid, pg_type.typname, pg_type.typarray from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
-          return self.query('select * from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
+          return self.query('select pg_class.oid AS relid, pg_type.oid, pg_type.typname, pg_type.typarray from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where pg_class.relkind = $1 order by pg_type.oid', ['c']);
+          //return self.query('select * from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
+        })
+        .then(function(res) {
+          console.log(res);
+          
+          // Fetch the attribute tables for all these rows, and insert composite types.
+          
+          
+          return;
         })
         .then(function(res) {
           //console.log(res)
           
-          console.log('!!!! SELECTING ATTRIBUTES OF COMPOSITE TYPE');
+          //console.log('!!!! SELECTING ATTRIBUTES OF COMPOSITE TYPE');
           
           // select all composite types
           //return self.query('select pg_type.oid, pg_type.typname, pg_type.typarray from pg_class INNER JOIN pg_type ON pg_class.reltype = pg_type.oid where relkind = $1 order by pg_type.oid', ['c']);
           return self.query('select * from pg_attribute where attrelid = $1', [ 16384 ]);
         })
         .then(function(res) {
-          console.log(res)
+          //console.log(res)
           //console.log(JSON.stringify(res.rows, null, 2))
           //console.log('create next table...');
           
