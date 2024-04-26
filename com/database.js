@@ -85,6 +85,15 @@ exports = module.exports = function($location) {
           }
         })
         .then(function(res) {
+          return self.query('SELECT to_regclass($1::text)', [ 'federated_credential' ])
+            .then(function(res) {
+              if (res && res.rows && res.rows[0] && res.rows[0]['to_regclass'] === null) {
+                var sql = fs.readFileSync(path.join(__dirname, '../lib/schema/federated_credential.sql'), 'utf8');
+                return self.query(sql);
+              }
+            });
+        })
+        .then(function(res) {
           // select all composite types
           return self.query('SELECT pg_class.oid AS relid, pg_type.oid, pg_type.typname, pg_type.typarray FROM pg_class JOIN pg_type ON pg_class.reltype = pg_type.oid WHERE pg_class.relkind = $1 ORDER BY pg_type.oid', [ 'c' ]);
         })

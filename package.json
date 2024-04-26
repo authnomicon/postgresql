@@ -33,6 +33,7 @@
     "namespace": "org.authnomicon/postgresql",
     "components": [
       "directory",
+      "credentials/federatedidstore",
       "credentials/passwordstore"
     ]
   },
