@@ -34,7 +34,8 @@
     "components": [
       "directory",
       "credentials/federatedidstore",
-      "credentials/passwordstore"
+      "credentials/passwordstore",
+      "oauth/clientdirectory"
     ]
   },
   "directories": {
