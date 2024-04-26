@@ -25,12 +25,21 @@ exports = module.exports = function($location) {
   return new Promise(function(resolve, reject) {
     
     
-    function createCompositeType(client, relid) {
-      
-      
-      return function() {
-        return client.query('SELECT * from pg_attribute WHERE attrelid = $1', [ relid ]);
-      };
+    function createCompositeType(client, relid, oid, aoid) {
+      return client.query('SELECT * from pg_attribute WHERE attrelid = $1', [ relid ])
+        .then(function(res) {
+          console.log(res);
+          
+          types.setTypeParser(oid, require('../lib/types/email')());
+          
+          
+          if (aoid) {
+            //console.log('PARSE THE ARRAY OF EMAILS!: ' + row.typarray);
+            types.setTypeParser(aoid, require('../lib/types/array')(types, oid));
+          }
+          
+          
+        });
     }
     
     
@@ -93,8 +102,10 @@ exports = module.exports = function($location) {
           
           // rows: [ { relid: 16384, oid: 16386, typname: 'email', typarray: 16385 } ]
           
+          console.log('!!!! CREATING COMPOSITE TYPES');
+          
           return Promise.all(res.rows.map(function(row) {
-            return createCompositeType(self, row.relid);
+            return createCompositeType(self, row.relid, row.oid, row.typarray);
           }));
         })
         .then(function(res) {
@@ -157,7 +168,8 @@ exports = module.exports = function($location) {
             //.  better: relkind is 'c' for composite types
             // TODO: look at pg_attribute for attributes
             
-            if (row.typname == 'email') {
+            //if (row.typname == 'email') {
+            if (0) {
               console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
               
               types.setTypeParser(row.oid, require('../lib/types/email')());
