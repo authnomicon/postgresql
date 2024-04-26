@@ -57,7 +57,23 @@ exports = module.exports = function($location) {
           return self.query('select * from pg_namespace order by oid');
         })
         .then(function(res) {
+          //console.log(res)
+          return self.query('select * from pg_class order by oid');
+        })
+        .then(function(res) {
+          //console.log(res)
+          //return self.query('select * from pg_attribute order by oid');
+        })
+        .then(function(res) {
+          //console.log(res)
+          
+          console.log('!!!! SELECTING ALL COMPOSITE TYPES');
+          
+          return self.query('select * from pg_class where relkind = $1 order by oid', ['c']);
+        })
+        .then(function(res) {
           console.log(res)
+          //console.log(JSON.stringify(res.rows, null, 2))
           //console.log('create next table...');
           
           if (res) {
@@ -90,7 +106,19 @@ exports = module.exports = function($location) {
               //console.log('ARRAY TYPE: ' + row.oid);
               //console.log(row);
             }
+
+            if (row.typcategory == 'C') {
+              //console.log('COMPOSITE TYPE: ' + row.oid);
+              //console.log(row);
+            }
             
+            
+            
+            // TODO: look at typrelid for attributes?
+            //. yes: it has a "reltype" for TYPEs, which point to the composite type
+            //.  reltype.   normal tables are 0
+            //.  better: relkind is 'c' for composite types
+            // TODO: look at pg_attribute for attributes
             
             if (row.typname == 'email') {
               console.log('REGISTER EMAIL TYPE!!!! ' + row.oid);
@@ -153,7 +181,7 @@ exports = module.exports = function($location) {
         })
         .catch(function(error) {
           console.log('$$$ Failed to initialize pg schema');
-          console.log(err);
+          console.log(error);
         });
     })
     
