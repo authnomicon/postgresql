@@ -32,20 +32,11 @@ exports = module.exports = function($location) {
       // TODO: parse more of the properties (isdropped, etc)
       return client.query('SELECT attname, atttypid, attnum FROM pg_attribute WHERE attrelid = $1 ORDER BY attnum', [ relid ])
         .then(function(res) {
-          //console.log(res);
-          console.log('### CREATE COMPOSITY TYPE: ' + name);
-          console.log(res);
-          
           // TODO: rename type to composite
-          types.setTypeParser(oid, require('../lib/types/email')(types, res.rows));
-          
-          
+          types.setTypeParser(oid, require('../lib/types/email')(res.rows, types));
           if (aoid) {
-            //console.log('PARSE THE ARRAY OF EMAILS!: ' + row.typarray);
-            types.setTypeParser(aoid, require('../lib/types/array')(types, oid));
+            types.setTypeParser(aoid, require('../lib/types/array')(oid, types));
           }
-          
-          
         });
     }
     
