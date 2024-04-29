@@ -33,7 +33,7 @@ exports = module.exports = function($location) {
       return client.query('SELECT attname, atttypid, attnum FROM pg_attribute WHERE attrelid = $1 ORDER BY attnum', [ relid ])
         .then(function(res) {
           // TODO: rename type to composite
-          types.setTypeParser(oid, require('../lib/types/email')(res.rows, types));
+          types.setTypeParser(oid, require('../lib/types/composite')(res.rows, types));
           if (aoid) {
             types.setTypeParser(aoid, require('../lib/types/array')(oid, types));
           }
