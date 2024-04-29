@@ -25,13 +25,19 @@ exports = module.exports = function($location) {
   return new Promise(function(resolve, reject) {
     
     
-    function createCompositeType(client, relid, oid, aoid) {
+    function createCompositeType(client, relid, oid, aoid, name) {
+      
+      
       // TODO: can slim down the columns selected here
-      return client.query('SELECT * from pg_attribute WHERE attrelid = $1', [ relid ])
+      // TODO: parse more of the properties (isdropped, etc)
+      return client.query('SELECT attname, atttypid, attnum FROM pg_attribute WHERE attrelid = $1 ORDER BY attnum', [ relid ])
         .then(function(res) {
+          //console.log(res);
+          console.log('### CREATE COMPOSITY TYPE: ' + name);
           console.log(res);
           
-          types.setTypeParser(oid, require('../lib/types/email')());
+          // TODO: rename type to composite
+          types.setTypeParser(oid, require('../lib/types/email')(types, res.rows));
           
           
           if (aoid) {
@@ -109,7 +115,7 @@ exports = module.exports = function($location) {
         .then(function(res) {
           // Fetch the attribute tables for all these rows, and insert composite types.
           return Promise.all(res.rows.map(function(row) {
-            return createCompositeType(self, row.relid, row.oid, row.typarray);
+            return createCompositeType(self, row.relid, row.oid, row.typarray, row.typname);
           }));
         })
         .catch(function(error) {
