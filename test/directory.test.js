@@ -32,7 +32,7 @@ describe('directory', function() {
         expect(client.query).to.have.been.calledOnce;
         var sql = client.query.getCall(0).args[0];
         var values = client.query.getCall(0).args[1];
-        expect(sql).to.equal('SELECT   users.* FROM users WHERE users.user_id = $1');
+        expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
         expect(values).to.deep.equal([ '703887' ]);
         
         expect(user).to.deep.equal({
