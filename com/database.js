@@ -19,6 +19,10 @@ var types = require('pg').types
 exports = module.exports = function($location) {
   // TODO: get this from a connection pool of some sort
   
+  console.log('@@@@ POSTGRES LOCATION @@@@');
+  console.log($location)
+  
+  
   //console.log('CONNECT TO POSTGRES!');
   //console.log($location);
   
@@ -125,8 +129,8 @@ exports = module.exports = function($location) {
 };
 
 exports['@singleton'] = true;
-//exports['@service'] = 'postgresql';
-//exports['@port'] = 5432;
-//exports['@require'] = [
-//  '$location'
-//];
+exports['@service'] = 'postgresql';
+exports['@port'] = 5432;
+exports['@require'] = [
+  '$location'
+];
