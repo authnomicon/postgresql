@@ -46,6 +46,7 @@
   "dependencies": {
     "@phc/pbkdf2": "^1.1.14",
     "pg": "^8.11.5",
+    "pg-types": "^4.0.2",
     "postgres-array": "^3.0.2",
     "postgres-composite": "^0.3.0",
     "uuidv7": "^0.6.3"
