@@ -1,4 +1,6 @@
 var GrantService = require('../../lib/oauth/grantservice');
+var fs = require('fs');
+var path = require('path');
 
 exports = module.exports = function($uri, postgresql) {
   //console.log('CONNECT TO POSTGRES!');

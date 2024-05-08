@@ -1,4 +1,6 @@
 var FederatedIDStore = require('../../lib/credentials/federatedidstore');
+var fs = require('fs');
+var path = require('path');
 
 exports = module.exports = function($uri, postgresql) {
   var pool = postgresql.createConnectionPool($uri);
