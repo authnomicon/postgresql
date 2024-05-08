@@ -15,6 +15,7 @@ describe('@authnomicon/sqlite', function() {
         'credentials/federatedidstore',
         'credentials/passwordstore',
         'oauth/clientdirectory',
+        'oauth/grantservice',
         'oauth/credentials/clientsecretstore'
       ]);
     });
