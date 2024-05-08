@@ -1,6 +1,6 @@
 {
   "name": "@authnomicon/postgresql",
-  "version": "0.0.7",
+  "version": "0.0.0",
   "description": "PostgreSQL components for the Authnomicon project.",
   "keywords": [
     "postgresql"
