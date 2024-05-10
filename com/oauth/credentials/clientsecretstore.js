@@ -12,7 +12,7 @@ exports = module.exports = function($uri, postgresql) {
         // TODO: log this with logger
         console.log('creating users table in: ');
   
-        var sql = fs.readFileSync(path.join(__dirname, '../../lib/schema/clients.sql'), 'utf8');
+        var sql = fs.readFileSync(path.join(__dirname, '../../../lib/schema/clients.sql'), 'utf8');
         return pool.query(sql);
       }
     })
