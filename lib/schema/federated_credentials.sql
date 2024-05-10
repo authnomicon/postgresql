@@ -1,4 +1,4 @@
-CREATE TABLE federated_credential (
+CREATE TABLE federated_credentials (
   provider TEXT NOT NULL,
   subject TEXT NOT NULL,
   user_id TEXT NOT NULL REFERENCES users(user_id),

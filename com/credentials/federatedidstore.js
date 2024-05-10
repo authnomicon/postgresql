@@ -5,13 +5,13 @@ var path = require('path');
 exports = module.exports = function($uri, postgresql) {
   var pool = postgresql.createConnectionPool($uri);
   
-  return pool.query('SELECT to_regclass($1::text)', [ 'federated_credential' ])
+  return pool.query('SELECT to_regclass($1::text)', [ 'federated_credentials' ])
     .then(function(res) {
       if (res && res.rows && res.rows[0] && res.rows[0]['to_regclass'] === null) {
         // TODO: log this with logger
         console.log('creating users table in: ');
       
-        var sql = fs.readFileSync(path.join(__dirname, '../../lib/schema/federated_credential.sql'), 'utf8');
+        var sql = fs.readFileSync(path.join(__dirname, '../../lib/schema/federated_credentials.sql'), 'utf8');
         return pool.query(sql);
       }
     })
