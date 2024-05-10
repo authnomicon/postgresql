@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `federated_credential` table to `federated_credentials`, following
 a pluralized naming convention due to the fact that the `users` table must be
 plural.
+- Renamed `client` table to `clients`, following a pluralized naming convention
+due to the fact that the `grants` table must be plural.
 
 ## [0.0.3] - 2024-05-08
 ### Fixed

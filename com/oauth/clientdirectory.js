@@ -6,13 +6,13 @@ exports = module.exports = function($uri, postgresql) {
   //console.log('CONNECT TO POSTGRES!');
   var pool = postgresql.createConnectionPool($uri);
   
-  return pool.query('SELECT to_regclass($1::text)', [ 'client' ])
+  return pool.query('SELECT to_regclass($1::text)', [ 'clients' ])
     .then(function(res) {
       if (res && res.rows && res.rows[0] && res.rows[0]['to_regclass'] === null) {
         // TODO: log this with logger
         console.log('creating users table in: ');
     
-        var sql = fs.readFileSync(path.join(__dirname, '../../lib/schema/client.sql'), 'utf8');
+        var sql = fs.readFileSync(path.join(__dirname, '../../lib/schema/clients.sql'), 'utf8');
         return pool.query(sql);
       }
     })
