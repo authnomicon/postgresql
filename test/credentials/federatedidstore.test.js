@@ -94,6 +94,34 @@ describe('credentials/federatedidstore', function() {
         .catch(done);
     }); // should not find user with non-existent credential
     
+    it('should error when database query fails', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(new Error('something went wrong'));
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+      
+      var store = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(store) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var subject = {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          };
+          var provider = 'https://server.example.com';
+          
+          store.find(subject, provider, function(err, user) {
+            expect(err).to.be.an.instanceOf(Error);
+            expect(err.message).to.equal('something went wrong');
+            done();
+          });
+        })
+        .catch(done);
+    }); // should error when database query fails
+    
   }); // #find
   
   describe('#add', function() {
