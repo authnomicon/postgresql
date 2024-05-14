@@ -60,6 +60,31 @@ describe('credentials/passwordstore', function() {
         .catch(done);
     }); // should create user account with username and password
     
+    it('should error when database query fails', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(new Error('something went wrong'));
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+      
+      var store = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(store) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+
+          var user = {
+            username: 'mhashimoto'
+          };
+          store.create(user, 'letmein', function(err, user) {
+            expect(err).to.be.an.instanceOf(Error);
+            expect(err.message).to.equal('something went wrong');
+            done();
+          });
+        })
+        .catch(done);
+    }); // should error when database query fails
+    
   }); // #create
   
   describe('#verify', function() {
