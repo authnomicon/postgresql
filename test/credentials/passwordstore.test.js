@@ -92,6 +92,7 @@ describe('credentials/passwordstore', function() {
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
             expect(sql).to.equal('SELECT *    FROM users   WHERE username = $1');
+            expect(values).to.deep.equal([ 'mhashimoto' ]);
             
             expect(user).to.deep.equal({
               id: '703887',
@@ -102,6 +103,76 @@ describe('credentials/passwordstore', function() {
         })
         .catch(done);
     }); // should verify password
+    
+    it('should not verify incorrect password', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            username: 'mhashimoto',
+            hashed_password: '$pbkdf2-sha256$i=310000$43I1LSSycXBMyfCHL81CKA$urMNIvsWf8bNmVP263MybiMPN0JV/UWXyaTMPJWMsrs'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+      
+      var store = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(store) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+        
+          store.verify('mhashimoto', 'donotletmein', function(err, user, info) {
+            if (err) { return done(err); }
+            
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('SELECT *    FROM users   WHERE username = $1');
+            expect(values).to.deep.equal([ 'mhashimoto' ]);
+            
+            expect(user).to.be.false;
+            expect(info.message).to.equal('Incorrect username or password.');
+            done();
+          });
+        })
+        .catch(done);
+    }); // should not verify incorrect password
+    
+    it('should not verify unknown username', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: []
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+      
+      var store = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(store) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+        
+          store.verify('mhashimoto', 'letmein', function(err, user, info) {
+            if (err) { return done(err); }
+            
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('SELECT *    FROM users   WHERE username = $1');
+            expect(values).to.deep.equal([ 'mhashimoto' ]);
+            
+            expect(user).to.be.false;
+            expect(info.message).to.equal('Incorrect username or password.');
+            done();
+          });
+        })
+        .catch(done);
+    }); // should not verify unknown username
     
   }); // #verify
   
