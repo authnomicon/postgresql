@@ -57,4 +57,57 @@ describe('directory', function() {
     
   }); // #read
   
+  describe('#create', function() {
+    
+    it('should create with family name and given name', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            family_name: 'Hashimoto',
+            given_name: 'Mork'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              familyName: 'Hashimoto',
+              givenName: 'Mork'
+            }
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            //expect(values).to.deep.equal([ '703887' ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                familyName: 'Hashimoto',
+                givenName: 'Mork'
+              }
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with family name and given name
+    
+  }); // #create
+  
 });
