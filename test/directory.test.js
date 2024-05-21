@@ -593,6 +593,77 @@ describe('directory', function() {
         .catch(done);
     }); // should create with phone numbers with number
     
+    it('should create with phone numbers with number, type, and primary', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            family_name: 'Hashimoto',
+            given_name: 'Mork',
+            phone_numbers: '{"(KLONDIKE5,work,,)","(650-123-4567,mobile,,)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              familyName: 'Hashimoto',
+              givenName: 'Mork'
+            },
+            phoneNumbers: [{
+              value: 'KLONDIKE5',
+              type: 'work'
+            }, {
+              value: '650-123-4567',
+              type: 'mobile'
+            }]
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(values[0]).to.be.a.string;
+            expect(values[0]).to.be.have.length(36);
+            expect(values.slice(1)).to.deep.equal([
+              'Hashimoto',
+              'Mork',
+              undefined,
+              [ '(KLONDIKE5,work,,)', '(650-123-4567,mobile,,)' ]
+            ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                familyName: 'Hashimoto',
+                givenName: 'Mork'
+              },
+              phoneNumbers: [{
+                value: 'KLONDIKE5',
+                type: 'work'
+              }, {
+                value: '650-123-4567',
+                type: 'mobile'
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with phone numbers with number, type, and primary
+    
   }); // #create
   
 });
