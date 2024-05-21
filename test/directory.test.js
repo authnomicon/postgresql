@@ -100,6 +100,105 @@ describe('directory', function() {
         .catch(done);
     }); // should map emails with address
     
+    it('should map emails with address, type, and primary', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            username: 'mhashimoto',
+            emails: '{"(mhashimoto-04@plaxo.com,work,t,)","(mhashimoto@plaxo.com,home,,)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          directory.read('703887', function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(values).to.deep.equal([ '703887' ]);
+        
+            expect(user).to.deep.equal({
+              id: '703887',
+              username: 'mhashimoto',
+              emails: [{
+                value: 'mhashimoto-04@plaxo.com',
+                type: 'work',
+                primary: true
+              }, {
+                value: 'mhashimoto@plaxo.com',
+                type: 'home'
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should map emails with address, type, and primary
+    
+    it('should map emails with verified status', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            username: 'mhashimoto',
+            emails: '{"(mhashimoto-04@plaxo.com,work,t,t)","(mhashimoto@plaxo.com,home,f,f)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          directory.read('703887', function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(values).to.deep.equal([ '703887' ]);
+        
+            expect(user).to.deep.equal({
+              id: '703887',
+              username: 'mhashimoto',
+              emails: [{
+                value: 'mhashimoto-04@plaxo.com',
+                type: 'work',
+                primary: true,
+                verified: true
+              }, {
+                value: 'mhashimoto@plaxo.com',
+                type: 'home',
+                primary: false,
+                verified: false
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should map emails with verified status
+    
     it('should map phone numbers with number', function(done) {
       var client = new Object();
       client.query = sinon.stub();
