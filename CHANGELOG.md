@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added
+- Parsing nickname for user object yielded from `PostgreSQLUserDirectory`.
+- Parsing URLs for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
+- Parsing gender for user object yielded from `PostgreSQLUserDirectory`.
 
 ### Changed
 - Simplified SQL schema to have a single `plural` type for `photos`, `urls`,
