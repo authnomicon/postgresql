@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added
-- Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory#read`.
+- Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
+
+### Fixed
+- Values of `user.emails[].primary` and `user.emails[].verified` no longer undefined
+when mapping from database.
+- `user.emails` and `user.phoneNumbers` are correctly inserted into database.
 
 ## [0.0.5] - 2024-05-10
 ### Fixed
