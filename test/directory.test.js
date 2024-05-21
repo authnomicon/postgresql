@@ -372,6 +372,160 @@ describe('directory', function() {
         .catch(done);
     }); // should create with emails with address
     
+    it('should create with emails with address, type, and primary', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            family_name: 'Hashimoto',
+            given_name: 'Mork',
+            emails: '{"(mhashimoto-04@plaxo.com,work,t,)","(mhashimoto@plaxo.com,home,f,)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              familyName: 'Hashimoto',
+              givenName: 'Mork'
+            },
+            emails: [{
+              value: 'mhashimoto-04@plaxo.com',
+              type: 'work',
+              primary: true
+            }, {
+              value: 'mhashimoto@plaxo.com',
+              type: 'home',
+              primary: false
+            }]
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(values[0]).to.be.a.string;
+            expect(values[0]).to.be.have.length(36);
+            expect(values.slice(1)).to.deep.equal([
+              'Hashimoto',
+              'Mork',
+              [ '(mhashimoto-04@plaxo.com,work,true,)', '(mhashimoto@plaxo.com,home,false,)' ],
+              undefined
+            ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                familyName: 'Hashimoto',
+                givenName: 'Mork'
+              },
+              emails: [{
+                value: 'mhashimoto-04@plaxo.com',
+                type: 'work',
+                primary: true
+              }, {
+                value: 'mhashimoto@plaxo.com',
+                type: 'home',
+                primary: false
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with emails with address, type, and primary
+    
+    it('should create with emails with verified status', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            family_name: 'Hashimoto',
+            given_name: 'Mork',
+            emails: '{"(mhashimoto-04@plaxo.com,work,t,t)","(mhashimoto@plaxo.com,home,f,f)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              familyName: 'Hashimoto',
+              givenName: 'Mork'
+            },
+            emails: [{
+              value: 'mhashimoto-04@plaxo.com',
+              type: 'work',
+              primary: true,
+              verified: true
+            }, {
+              value: 'mhashimoto@plaxo.com',
+              type: 'home',
+              primary: false,
+              verified: false
+            }]
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(values[0]).to.be.a.string;
+            expect(values[0]).to.be.have.length(36);
+            expect(values.slice(1)).to.deep.equal([
+              'Hashimoto',
+              'Mork',
+              [ '(mhashimoto-04@plaxo.com,work,true,true)', '(mhashimoto@plaxo.com,home,false,false)' ],
+              undefined
+            ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                familyName: 'Hashimoto',
+                givenName: 'Mork'
+              },
+              emails: [{
+                value: 'mhashimoto-04@plaxo.com',
+                type: 'work',
+                primary: true,
+                verified: true
+              }, {
+                value: 'mhashimoto@plaxo.com',
+                type: 'home',
+                primary: false,
+                verified: false
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with emails with verified status
+    
     it('should create with phone numbers with number', function(done) {
       var client = new Object();
       client.query = sinon.stub();
