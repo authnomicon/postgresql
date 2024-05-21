@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
 
+### Changed
+- Simplified SQL schema to have a single `plural` type for `photos`, `urls`,
+`emails`, and `phone_numbers`, following the convention established by [Portable Contacts](https://datatracker.ietf.org/doc/html/draft-smarr-vcarddav-portable-contacts-00).
+
 ### Fixed
 - Values of `user.emails[].primary` and `user.emails[].verified` no longer undefined
 when mapping from database.

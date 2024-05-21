@@ -1,18 +1,5 @@
-CREATE TYPE url AS (
-  location TEXT,
-  type TEXT,
-  is_primary BOOLEAN
-);
-
-CREATE TYPE email AS (
-  address TEXT,
-  type TEXT,
-  is_primary BOOLEAN,
-  is_verified BOOLEAN
-);
-
-CREATE TYPE phone_number AS (
-  number TEXT,
+CREATE TYPE plural AS (
+  value TEXT,
   type TEXT,
   is_primary BOOLEAN,
   is_verified BOOLEAN
@@ -25,7 +12,8 @@ CREATE TYPE address AS (
   postal_code TEXT,
   country TEXT,
   type TEXT,
-  is_primary BOOLEAN
+  is_primary BOOLEAN,
+  is_verified BOOLEAN
 );
 
 -- postgres won't allow a singulear "user" table, so violating that convention here
@@ -41,10 +29,10 @@ CREATE TABLE users (
   honorific_prefix TEXT,
   honorific_suffix TEXT,
   nickname TEXT,
-  photos url[],
-  urls url[],
-  emails email[],
-  phone_numbers phone_number[],
+  photos plural[],
+  urls plural[],
+  emails plural[],
+  phone_numbers plural[],
   gender TEXT,
   birthday DATE,
   addresses address[],
