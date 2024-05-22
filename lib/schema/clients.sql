@@ -25,6 +25,7 @@ CREATE TABLE clients (
   require_signed_authorization_request BOOLEAN,
   require_pushed_authorization_request BOOLEAN,
   authorization_details_types TEXT[],
+  require_dpop_token_requests BOOLEAN,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
   updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
