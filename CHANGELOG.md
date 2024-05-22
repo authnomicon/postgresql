@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
 ### Added
 - Parsing nickname for user object yielded from `PostgreSQLUserDirectory`.
+- Parsing photos for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing URLs for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing gender for user object yielded from `PostgreSQLUserDirectory`.
