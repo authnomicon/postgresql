@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing URLs for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing gender for user object yielded from `PostgreSQLUserDirectory`.
+- Additional columns to `clients` SQL schema to support [OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591).
 
 ### Changed
 - Simplified SQL schema to have a single `plural` type for `photos`, `urls`,
 `emails`, and `phone_numbers`, following the convention established by [Portable Contacts](https://datatracker.ietf.org/doc/html/draft-smarr-vcarddav-portable-contacts-00).
+- Renamed `redirect_uris` column of `clients` table to `redirect_urls`.
 
 ### Fixed
 - Values of `user.emails[].primary` and `user.emails[].verified` no longer undefined

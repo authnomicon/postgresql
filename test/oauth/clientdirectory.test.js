@@ -24,7 +24,7 @@ describe('oauth/clientdirectory', function() {
           {
             client_id: 's6BhdRkqt3',
             name: 'My Example Client',
-            redirect_uris: [
+            redirect_urls: [
               'https://client.example.org/callback',
               'https://client.example.org/callback2'
             ]
