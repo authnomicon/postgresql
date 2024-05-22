@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [OpenID Connect Front-Channel Logout](https://openid.net/specs/openid-connect-frontchannel-1_0.html),
 [OpenID Connect Back-Channel Logout](https://openid.net/specs/openid-connect-backchannel-1_0.html),
 [JWT-Secured Authorization Request (JAR)](https://www.rfc-editor.org/rfc/rfc9101.html),
-[Pushed Authorization Requests (PAR)](https://www.rfc-editor.org/rfc/rfc9126.html)
+[Pushed Authorization Requests (PAR)](https://www.rfc-editor.org/rfc/rfc9126.html), and
+[Rich Authorization Requests (RAR)](https://www.rfc-editor.org/rfc/rfc9396.html)
 
 ### Changed
 - Simplified SQL schema to have a single `plural` type for `photos`, `urls`,

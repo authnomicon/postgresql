@@ -24,6 +24,7 @@ CREATE TABLE clients (
   backchannel_logout_session_required BOOLEAN,
   require_signed_authorization_request BOOLEAN,
   require_pushed_authorization_request BOOLEAN,
+  authorization_details_types TEXT[],
   created_at TIMESTAMP NOT NULL DEFAULT now(),
   updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
