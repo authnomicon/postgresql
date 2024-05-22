@@ -3,6 +3,7 @@ CREATE TABLE clients (
   hashed_secret TEXT,
   name TEXT,
   redirect_urls TEXT[],
+  origin_urls TEXT[],
   token_endpoint_auth_method TEXT,
   grant_types TEXT[],
   response_types TEXT[],
@@ -12,7 +13,9 @@ CREATE TABLE clients (
   contacts TEXT[],
   terms_of_service_url TEXT,
   privacy_policy_url TEXT,
-  json_web_key_set_url TEXT,
+  jwk_set_url TEXT,
+  type TEXT,
+  initiate_login_url TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
   updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -22,3 +25,4 @@ CREATE TABLE clients (
 -- TODO: software_version
 -- TODO: client_secret_expires_at
 
+-- TODO: sector_identifier_url https://openid.net/specs/openid-connect-registration-1_0.html
