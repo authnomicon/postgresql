@@ -11,7 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing URLs for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing gender for user object yielded from `PostgreSQLUserDirectory`.
-- Additional columns to `clients` SQL schema to support [OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591).
+- Additional columns to `clients` SQL schema to support [OAuth 2.0 Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591),
+[OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html),
+[OpenID Connect RP-Initiated Logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html),
+[OpenID Connect Front-Channel Logout](https://openid.net/specs/openid-connect-frontchannel-1_0.html),
+[OpenID Connect Back-Channel Logout](https://openid.net/specs/openid-connect-backchannel-1_0.html),
+[JWT-Secured Authorization Request (JAR)](https://www.rfc-editor.org/rfc/rfc9101.html),
+[Pushed Authorization Requests (PAR)](https://www.rfc-editor.org/rfc/rfc9126.html)
 
 ### Changed
 - Simplified SQL schema to have a single `plural` type for `photos`, `urls`,

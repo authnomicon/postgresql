@@ -4,6 +4,7 @@ CREATE TABLE clients (
   name TEXT,
   redirect_urls TEXT[],
   origin_urls TEXT[],
+  -- TODO: rename this to just "auth_method", since its good at other URLs (PAR, etc)
   token_endpoint_auth_method TEXT,
   grant_types TEXT[],
   response_types TEXT[],
@@ -16,6 +17,13 @@ CREATE TABLE clients (
   jwk_set_url TEXT,
   type TEXT,
   initiate_login_url TEXT,
+  post_logout_redirect_urls TEXT[],
+  frontchannel_logout_url TEXT,
+  frontchannel_logout_session_required BOOLEAN,
+  backchannel_logout_url TEXT,
+  backchannel_logout_session_required BOOLEAN,
+  require_signed_authorization_request BOOLEAN,
+  require_pushed_authorization_request BOOLEAN,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
   updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
