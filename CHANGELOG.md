@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Inserting honorific prefix into database.
 - Inserting honorific suffix into database.
 - Inserting nickname into database.
+- Inserting photos into database.
+- Inserting URLs into database.
 - Additional columns to `clients` SQL schema to support [OAuth 2.0 Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591),
 [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html),
 [OpenID Connect RP-Initiated Logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html),
