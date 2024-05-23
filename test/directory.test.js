@@ -282,12 +282,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               undefined,
               undefined
             ]);
@@ -297,6 +298,60 @@ describe('directory', function() {
               name: {
                 familyName: 'Hashimoto',
                 givenName: 'Mork'
+              }
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with family name and given name
+    
+    it('should create with middle name', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            middle_name: 'Robert'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              middleName: 'Robert'
+            }
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
+            expect(values[0]).to.be.a.string;
+            expect(values[0]).to.be.have.length(36);
+            expect(values.slice(1)).to.deep.equal([
+              undefined,
+              undefined,
+              'Robert',
+              undefined,
+              undefined
+            ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                middleName: 'Robert'
               }
             });
             done();
@@ -344,12 +399,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               [ '(mhashimoto-04@plaxo.com,,,)', '(mhashimoto@plaxo.com,,,)' ],
               undefined
             ]);
@@ -415,12 +471,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               [ '(mhashimoto-04@plaxo.com,work,true,)', '(mhashimoto@plaxo.com,home,false,)' ],
               undefined
             ]);
@@ -492,12 +549,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               [ '(mhashimoto-04@plaxo.com,work,true,true)', '(mhashimoto@plaxo.com,home,false,false)' ],
               undefined
             ]);
@@ -565,12 +623,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               undefined,
               [ '(KLONDIKE5,,,)', '(650-123-4567,,,)' ]
             ]);
@@ -636,12 +695,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               undefined,
               [ '(KLONDIKE5,work,true,)', '(650-123-4567,mobile,false,)' ]
             ]);
@@ -713,12 +773,13 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5) RETURNING *');
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, emails, phone_numbers)    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *');
             expect(values[0]).to.be.a.string;
             expect(values[0]).to.be.have.length(36);
             expect(values.slice(1)).to.deep.equal([
               'Hashimoto',
               'Mork',
+              undefined,
               undefined,
               [ '(KLONDIKE5,work,true,false)', '(650-123-4567,mobile,false,true)' ]
             ]);

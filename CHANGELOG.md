@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parsing URLs for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing phone numbers for user object yielded from `PostgreSQLUserDirectory`.
 - Parsing gender for user object yielded from `PostgreSQLUserDirectory`.
+- Inserting middle name into database.
 - Additional columns to `clients` SQL schema to support [OAuth 2.0 Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591),
 [OpenID Connect Dynamic Client Registration](https://openid.net/specs/openid-connect-registration-1_0.html),
 [OpenID Connect RP-Initiated Logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html),
