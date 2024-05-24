@@ -1512,6 +1512,83 @@ describe('directory', function() {
         .catch(done);
     }); // should create with address with street address, locality, and region
     
+    it('should create with address with street address, locality, region, and postal code', function(done) {
+      var client = new Object();
+      client.query = sinon.stub();
+      client.query.onFirstCall().resolves(null);
+      client.query.onSecondCall().yieldsAsync(null, {
+        rows: [
+          {
+            user_id: '703887',
+            family_name: 'Page',
+            given_name: 'Larry',
+            addresses: '{"(\\"1600 Amphitheatre Parkway\nSuite 200\\",\\"Mountain View\\",CA,94043,,,,)"}'
+          }
+        ]
+      });
+      
+      var postgres = new Object();
+      postgres.createConnectionPool = sinon.stub().returns(client);
+    
+      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+        .then(function(directory) {
+          expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
+          
+          var user = {
+            name: {
+              familyName: 'Page',
+              givenName: 'Larry'
+            },
+            addresses: [{
+              streetAddress: '1600 Amphitheatre Parkway\nSuite 200',
+              locality: 'Mountain View',
+              region: 'CA',
+              postalCode: '94043'
+            }]
+          };
+          directory.create(user, function(err, user) {
+            if (err) { return done(err); }
+        
+            expect(client.query).to.have.been.calledTwice;
+            var sql = client.query.getCall(1).args[0];
+            var values = client.query.getCall(1).args[1];
+            expect(sql).to.equal('INSERT INTO users (user_id, family_name, given_name, middle_name, honorific_prefix, honorific_suffix, nickname, photos, urls, emails, phone_numbers, gender, addresses)    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *');
+            expect(values[0]).to.be.a.string;
+            expect(values[0]).to.be.have.length(36);
+            expect(values.slice(1)).to.deep.equal([
+              'Page',
+              'Larry',
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              [ '(1600 Amphitheatre Parkway\nSuite 200,Mountain View,CA,94043,,,,)' ]
+            ]);
+            
+            expect(user).to.deep.equal({
+              id: '703887',
+              name: {
+                familyName: 'Page',
+                givenName: 'Larry'
+              },
+              addresses: [{
+                streetAddress: '1600 Amphitheatre Parkway\nSuite 200',
+                locality: 'Mountain View',
+                region: 'CA',
+                postalCode: '94043'
+              }]
+            });
+            done();
+          });
+        })
+        .catch(done);
+    }); // should create with address with street address, locality, region, and postal code
+    
   }); // #create
   
 });
