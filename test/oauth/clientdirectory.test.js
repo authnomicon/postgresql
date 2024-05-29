@@ -45,7 +45,7 @@ describe('oauth/clientdirectory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT * FROM clients WHERE client_id = $1');
+            expect(sql).to.equal('SELECT *    FROM clients   WHERE client_id = $1');
             expect(values).to.deep.equal([ 's6BhdRkqt3' ]);
         
             expect(oclient).to.deep.equal({
