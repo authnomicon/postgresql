@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `client.webOrigins` to `client.originURIs` and correctly read value
 from database.
 
+### Fixed
+- Fixed error where `FederatedIDStore` would fail to be created due to
+underlying `users` table not existing in database.
+
 ## [0.0.6] - 2024-05-28
 ### Added
 - Parsing nickname for user object yielded from `PostgreSQLUserDirectory`.
