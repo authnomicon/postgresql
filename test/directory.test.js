@@ -39,7 +39,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
@@ -81,7 +81,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
@@ -123,7 +123,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
@@ -168,7 +168,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
@@ -217,7 +217,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
@@ -268,7 +268,7 @@ describe('directory', function() {
             expect(client.query).to.have.been.calledTwice;
             var sql = client.query.getCall(1).args[0];
             var values = client.query.getCall(1).args[1];
-            expect(sql).to.equal('SELECT *    FROM users   WHERE user_id = $1');
+            expect(sql).to.equal('SELECT * FROM users WHERE user_id = $1');
             expect(values).to.deep.equal([ '703887' ]);
         
             expect(user).to.deep.equal({
