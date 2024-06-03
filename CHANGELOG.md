@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added protected `PostgreSQLUserDirectory#_toRow()` function, which can be
 overridden by subclasses to extend rows with additional columns prior to
 inserting into database.
-- Added PostgreSQLAccessTokenService component.
+- Added `PostgreSQLAccessTokenService` component.
+- Added `PostgreSQLAuthorizationCodeService` component.
 
 ## [0.0.7] - 2024-05-31
 ### Changed
