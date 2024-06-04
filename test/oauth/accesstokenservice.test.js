@@ -45,7 +45,7 @@ describe('oauth/accesstokenservice', function() {
             var values = client.query.getCall(1).args[1];
             expect(sql).to.equal('INSERT INTO access_tokens (token_hash, user_id, client_id) VALUES ($1, $2, $3)');
             expect(values).to.deep.equal([
-              crypto.createHash('sha256').update(Buffer.from(token, 'base64')).digest('base64'),
+              crypto.createHash('sha256').update(Buffer.from(token, 'base64')).digest(),
               '5ba552d67',
               's6BhdRkqt3'
             ]);
@@ -66,7 +66,7 @@ describe('oauth/accesstokenservice', function() {
       client.query.onSecondCall().yieldsAsync(null, {
         rowCount: 1,
         rows: [ {
-          token_hash: 'lnQPJYXx3smhBXrG+r94Uoa/bBatC/7FT1qeXM1wHmY=',
+          token_hash: Buffer.from('lnQPJYXx3smhBXrG+r94Uoa/bBatC/7FT1qeXM1wHmY=', 'base64'),
           user_id: '5ba552d67',
           client_id: 's6BhdRkqt3'
         }]
@@ -87,7 +87,7 @@ describe('oauth/accesstokenservice', function() {
             var values = client.query.getCall(1).args[1];
             expect(sql).to.equal('SELECT * FROM access_tokens WHERE token_hash = $1');
             expect(values).to.deep.equal([
-              'lnQPJYXx3smhBXrG+r94Uoa/bBatC/7FT1qeXM1wHmY='
+              Buffer.from('lnQPJYXx3smhBXrG+r94Uoa/bBatC/7FT1qeXM1wHmY=', 'base64')
             ]);
             
             expect(msg).to.deep.equal({

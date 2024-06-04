@@ -1,5 +1,5 @@
 CREATE TABLE authorization_codes (
-  code_hash TEXT PRIMARY KEY,
+  code_hash BYTEA PRIMARY KEY,
   issuer TEXT NOT NULL,
   client_id TEXT NOT NULL,
   redirect_uri TEXT,

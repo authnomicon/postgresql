@@ -43,7 +43,7 @@ describe('oauth/authorizationcodeservice', function() {
             var values = client.query.getCall(1).args[1];
             expect(sql).to.equal('INSERT INTO authorization_codes (code_hash, client_id, redirect_uri, user_id) VALUES ($1, $2, $3, $4)');
             expect(values).to.deep.equal([
-              crypto.createHash('sha256').update(Buffer.from(code, 'base64')).digest('base64'),
+              crypto.createHash('sha256').update(Buffer.from(code, 'base64')).digest(),
               's6BhdRkqt3',
               'https://client.example.com/cb',
               '5ba552d67'
@@ -65,7 +65,7 @@ describe('oauth/authorizationcodeservice', function() {
       client.query.onSecondCall().yieldsAsync(null, {
         rowCount: 1,
         rows: [ {
-          code_hash: 'IKi12xttOtADetKoyu72faztI1s2EGZdpP7Hr47xz7M=',
+          code_hash: Buffer.from('IKi12xttOtADetKoyu72faztI1s2EGZdpP7Hr47xz7M=', 'base64'),
           client_id: 's6BhdRkqt3',
           redirect_uri: 'https://client.example.com/cb',
           user_id: '5ba552d67'
@@ -87,7 +87,7 @@ describe('oauth/authorizationcodeservice', function() {
             var values = client.query.getCall(1).args[1];
             expect(sql).to.equal('SELECT * FROM authorization_codes WHERE code_hash = $1');
             expect(values).to.deep.equal([
-              'IKi12xttOtADetKoyu72faztI1s2EGZdpP7Hr47xz7M='
+              Buffer.from('IKi12xttOtADetKoyu72faztI1s2EGZdpP7Hr47xz7M=', 'base64')
             ]);
             
             expect(msg).to.deep.equal({
