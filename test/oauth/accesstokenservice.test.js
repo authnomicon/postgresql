@@ -53,7 +53,7 @@ describe('oauth/accesstokenservice', function() {
           });
         })
         .catch(done);
-    }); // should insert redirect URI
+    }); // should insert user ID and client ID
     
   }); // #issue
   
