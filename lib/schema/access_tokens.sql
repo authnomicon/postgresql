@@ -5,7 +5,16 @@ CREATE TABLE access_tokens (
   client_id TEXT,
   audience TEXT[],
   scope TEXT[],
+  use_count INTEGER,
+  max_use INTEGER,
   issued_at TIMESTAMP DEFAULT now(),
   valid_at TIMESTAMP DEFAULT now(),
   expires_at TIMESTAMP DEFAULT now() + interval '1 day'
 );
+
+-- https://datatracker.ietf.org/doc/html/rfc9068
+-- TODO: auth_time
+-- TODO: acr
+-- TODO: amr
+
+-- https://datatracker.ietf.org/doc/html/rfc7662
