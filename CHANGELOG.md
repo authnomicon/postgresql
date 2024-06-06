@@ -13,6 +13,13 @@ inserting into database.
 - Added `PostgreSQLAccessTokenService` component.
 - Added `PostgreSQLAuthorizationCodeService` component.
 
+### Changed
+- Added `grant` argument to `PostgreSQLGrantService#create()`.
+
+### Fixed
+- `PostgreSQLGrantService#find()` yields grant object when found.
+- `PostgreSQLGrantService#create()` is now implemented.
+
 ## [0.0.7] - 2024-05-31
 ### Changed
 - Renamed `client.webOrigins` to `client.originURIs` and correctly read value
