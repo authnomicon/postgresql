@@ -7,10 +7,7 @@ describe('oauth/clientdirectory', function() {
   
   it('should be annotated', function() {
     expect(factory['@singleton']).to.be.true;
-    expect(factory['@implements']).to.deep.equal([
-      'http://i.authnomicon.org/oauth2/ClientDirectory',
-      'http://i.authnomicon.org/openidconnect/ClientDirectory'
-    ]);
+    expect(factory['@implements']).to.equal('module:@authnomicon/oauth2.ClientDirectory');
   });
   
   describe('#read', function() {
