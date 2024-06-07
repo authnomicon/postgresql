@@ -22,10 +22,7 @@ exports = module.exports = function($uri, postgresql) {
 };
 
 exports['@singleton'] = true;
-exports['@implements'] = [
-  'http://i.authnomicon.org/oauth2/ClientDirectory',
-  'http://i.authnomicon.org/openidconnect/ClientDirectory'
-];
+exports['@implements'] = 'module:@authnomicon/oauth2.ClientDirectory';
 exports['@service'] = 'apclient-postgresql';
 exports['@port'] = 5432;
 exports['@env'] = [ 'DATABASE_URL' ];

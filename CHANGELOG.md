@@ -15,6 +15,9 @@ inserting into database.
 
 ### Changed
 - Added `grant` argument to `PostgreSQLGrantService#create()`.
+- Renamed `http://i.authnomicon.org/oauth2/ClientDirectory` interface and
+`http://i.authnomicon.org/openidconnect/ClientDirectory` interface to
+to `module:@authnomicon/oauth2.ClientDirectory`.
 
 ### Fixed
 - `PostgreSQLGrantService#find()` yields grant object when found.
