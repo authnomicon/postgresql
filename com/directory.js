@@ -16,6 +16,19 @@ exports = module.exports = function($uri, postgresql) {
       }
     })
     .then(function() {
+      // webauthn extensions
+      
+      return pool.query('SELECT column_name FROM information_schema.columns WHERE table_name = $1 and column_name = $2', [ 'users', 'handle' ])
+        .then(function(res) {
+          console.log(res);
+          
+          if (res.rows.length == 0) {
+            // column does not exist, create it
+            return pool.query('ALTER TABLE users ADD handle BYTEA UNIQUE');
+          }
+        });
+    })
+    .then(function() {
       return new Directory(pool);
     });
 };

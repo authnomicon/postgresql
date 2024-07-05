@@ -14,6 +14,7 @@ describe('@authnomicon/postgresql', function() {
         'directory',
         'credentials/federatedidstore',
         'credentials/passwordstore',
+        'credentials/publickeystore',
         'oauth/accesstokenservice',
         'oauth/authorizationcodeservice',
         'oauth/clientdirectory',

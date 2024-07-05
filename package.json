@@ -35,6 +35,7 @@
       "directory",
       "credentials/federatedidstore",
       "credentials/passwordstore",
+      "credentials/publickeystore",
       "oauth/accesstokenservice",
       "oauth/authorizationcodeservice",
       "oauth/clientdirectory",
