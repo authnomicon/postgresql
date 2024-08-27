@@ -2,9 +2,9 @@ var ClientSecretStore = require('../../../lib/oauth/credentials/clientsecretstor
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function($uri, postgresql) {
+exports = module.exports = function(clientDbUrl, dbUrl, postgresql) {
   //console.log('CONNECT TO POSTGRES!');
-  var pool = postgresql.createConnectionPool($uri);
+  var pool = postgresql.createConnectionPool(clientDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'clients' ])
     .then(function(res) {
@@ -23,10 +23,11 @@ exports = module.exports = function($uri, postgresql) {
 
 exports['@singleton'] = true;
 exports['@implements'] = 'http://i.authnomicon.org/oauth2/ClientSecretService';
-exports['@service'] = 'apclient-postgresql';
-exports['@port'] = 5432;
-exports['@env'] = [ 'DATABASE_URL' ];
+//exports['@service'] = 'apclient-postgresql';
+//exports['@port'] = 5432;
+//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri',
+  '$uri[apclient-postgresql]?',
+  '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];

@@ -18,6 +18,7 @@ inserting into database.
 - Renamed `http://i.authnomicon.org/oauth2/ClientDirectory` interface and
 `http://i.authnomicon.org/openidconnect/ClientDirectory` interface to
 to `module:@authnomicon/oauth2.ClientDirectory`.
+- Adopted new service discovery annotations for next release of `bixby`.
 
 ### Fixed
 - `PostgreSQLGrantService#find()` yields grant object when found.

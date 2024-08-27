@@ -29,7 +29,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
 
@@ -69,7 +69,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
 
@@ -106,7 +106,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
         
@@ -146,7 +146,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
         
@@ -178,7 +178,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
         
@@ -208,7 +208,7 @@ describe('credentials/passwordstore', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      var store = factory('postgresql://www.example.com/exampledb', postgres)
+      var store = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(store) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
         

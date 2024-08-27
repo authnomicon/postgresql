@@ -32,7 +32,7 @@ describe('oauth/clientdirectory', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
     
-      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+      var directory = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(directory) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           
@@ -79,7 +79,7 @@ describe('oauth/clientdirectory', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
     
-      var directory = factory('postgresql://www.example.com/exampledb', postgres)
+      var directory = factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(directory) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           

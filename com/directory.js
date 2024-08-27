@@ -2,8 +2,8 @@ var Directory = require('../lib/directory');
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function($uri, postgresql) {
-  var pool = postgresql.createConnectionPool($uri);
+exports = module.exports = function(userDbUrl, dbUrl, postgresql) {
+  var pool = postgresql.createConnectionPool(userDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'users' ])
     .then(function(res) {
@@ -35,10 +35,11 @@ exports = module.exports = function($uri, postgresql) {
 
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/core.Directory';
-exports['@service'] = 'apuser-postgresql';
-exports['@port'] = 5432;
-exports['@env'] = [ 'DATABASE_URL' ];
+//exports['@service'] = 'apuser-postgresql';
+//exports['@port'] = 5432;
+//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri',
+  '$uri[apuser-postgresql]?',
+  '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];

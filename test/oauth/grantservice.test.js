@@ -34,7 +34,7 @@ describe('oauth/grantservice', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      factory('postgresql://www.example.com/exampledb', postgres)
+      factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(grants) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           
@@ -80,7 +80,7 @@ describe('oauth/grantservice', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      factory('postgresql://www.example.com/exampledb', postgres)
+      factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(grants) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           
@@ -126,7 +126,7 @@ describe('oauth/grantservice', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      factory('postgresql://www.example.com/exampledb', postgres)
+      factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(grants) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           

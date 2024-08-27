@@ -25,7 +25,7 @@ describe('oauth/authorizationcodeservice', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      factory('postgresql://www.example.com/exampledb', postgres)
+      factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(sts) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           
@@ -75,7 +75,7 @@ describe('oauth/authorizationcodeservice', function() {
       var postgres = new Object();
       postgres.createConnectionPool = sinon.stub().returns(client);
       
-      factory('postgresql://www.example.com/exampledb', postgres)
+      factory(undefined, 'postgresql://www.example.com/exampledb', postgres)
         .then(function(sts) {
           expect(postgres.createConnectionPool).to.have.been.calledOnceWith('postgresql://www.example.com/exampledb');
           
