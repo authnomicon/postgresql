@@ -2,9 +2,9 @@ var AuthorizationCodeService = require('../../lib/oauth/authorizationcodeservice
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function(codeDbUrl, dbUrl, postgresql) {
+exports = module.exports = function(aaaDbUrl, dbUrl, postgresql) {
   //console.log('CONNECT TO POSTGRES!');
-  var pool = postgresql.createConnectionPool(codeDbUrl || dbUrl);
+  var pool = postgresql.createConnectionPool(aaaDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'authorization_codes' ])
     .then(function(res) {
@@ -23,11 +23,8 @@ exports = module.exports = function(codeDbUrl, dbUrl, postgresql) {
 
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/oauth2.AuthorizationCodeService';
-//exports['@service'] = 'apazcodes-postgresql';
-//exports['@port'] = 5432;
-//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri[apazcodes-postgresql]?',
+  '$uri[authnomiconaaa-postgresql]?',
   '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];

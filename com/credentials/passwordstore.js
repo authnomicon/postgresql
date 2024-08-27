@@ -2,8 +2,8 @@ var PasswordStore = require('../../lib/credentials/passwordstore');
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function(userDbUrl, dbUrl, postgresql) {
-  var pool = postgresql.createConnectionPool(userDbUrl || dbUrl);
+exports = module.exports = function(usersDbUrl, dbUrl, postgresql) {
+  var pool = postgresql.createConnectionPool(usersDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'users' ])
     .then(function(res) {
@@ -23,7 +23,7 @@ exports = module.exports = function(userDbUrl, dbUrl, postgresql) {
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/credentials.PasswordStore';
 exports['@require'] = [
-  '$uri[apuser-postgresql]?',
+  '$uri[authnomiconusers-postgresql]?',
   '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];

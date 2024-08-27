@@ -2,14 +2,14 @@ var PublicKeyStore = require('../../lib/credentials/publickeystore');
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function(credDbUrl, dbUrl, postgresql, _users) {
+exports = module.exports = function(credentialsDbUrl, dbUrl, postgresql, _users) {
   // NOTE: the `_users` variable is a directory instance.  The variable is not
   // used by this component, but it is required because instantiating it has the
   // side effect of creating the `users` table, which the
   // `federated_credentials` table has a relation to.  If it were not required,
   // creating the `federated_credentials` table would fail.
   
-  var pool = postgresql.createConnectionPool(credDbUrl || dbUrl);
+  var pool = postgresql.createConnectionPool(credentialsDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'public_key_credentials' ])
     .then(function(res) {
@@ -28,11 +28,8 @@ exports = module.exports = function(credDbUrl, dbUrl, postgresql, _users) {
 
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/credentials.PublicKeyStore';
-//exports['@service'] = 'apcred-postgresql';
-//exports['@port'] = 5432;
-//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri[apcred-postgresql]?',
+  '$uri[authnomiconcredentials-postgresql]?',
   '$uri[postgresql]?',
   'module:bixby-postgresql',
   '../directory'

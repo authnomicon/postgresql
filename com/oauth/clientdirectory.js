@@ -2,9 +2,9 @@ var ClientDirectory = require('../../lib/oauth/clientdirectory');
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function(clientDbUrl, dbUrl, postgresql) {
+exports = module.exports = function(aaaDbUrl, dbUrl, postgresql) {
   //console.log('CONNECT TO POSTGRES!');
-  var pool = postgresql.createConnectionPool(clientDbUrl || dbUrl);
+  var pool = postgresql.createConnectionPool(aaaDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'clients' ])
     .then(function(res) {
@@ -23,11 +23,8 @@ exports = module.exports = function(clientDbUrl, dbUrl, postgresql) {
 
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/oauth2.ClientDirectory';
-//exports['@service'] = 'apclient-postgresql';
-//exports['@port'] = 5432;
-//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri[apclient-postgresql]?',
+  '$uri[authnomiconaaa-postgresql]?',
   '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];

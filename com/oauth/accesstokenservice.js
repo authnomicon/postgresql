@@ -2,9 +2,9 @@ var AccessTokenService = require('../../lib/oauth/accesstokenservice');
 var fs = require('fs');
 var path = require('path');
 
-exports = module.exports = function(tokenDbUrl, dbUrl, postgresql) {
+exports = module.exports = function(aaaDbUrl, dbUrl, postgresql) {
   //console.log('CONNECT TO POSTGRES!');
-  var pool = postgresql.createConnectionPool(tokenDbUrl || dbUrl);
+  var pool = postgresql.createConnectionPool(aaaDbUrl || dbUrl);
   
   return pool.query('SELECT to_regclass($1::text)', [ 'access_tokens' ])
     .then(function(res) {
@@ -26,11 +26,8 @@ exports['@implements'] = [
   'http://i.bixbyjs.org/security/TokenService', // for bearer scheme
   'module:@authnomicon/oauth2.AccessTokenService'
 ];
-//exports['@service'] = 'aptokens-postgresql';
-//exports['@port'] = 5432;
-//exports['@env'] = [ 'DATABASE_URL' ];
 exports['@require'] = [
-  '$uri[aptokens-postgresql]?',
+  '$uri[authnomiconaaa-postgresql]?',
   '$uri[postgresql]?',
   'module:bixby-postgresql'
 ];
